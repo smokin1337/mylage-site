@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy — Mylage</title>
+    <meta name="description" content="Mylage Privacy Policy. Your location data stays on your device. No accounts, no tracking, no ads.">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📍</text></svg>">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="/" class="nav-brand">
+                <span class="nav-logo">📍</span>
+                <span class="nav-name">Mylage</span>
+            </a>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="support.html">Support</a>
+                <a href="terms.html">Terms</a>
+            </div>
+            <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <section class="page-header">
+        <div class="container">
+            <h1>Privacy Policy</h1>
+            <p>Last updated: March 21, 2026</p>
+        </div>
+    </section>
+
+    <div class="page-content">
+        <div class="highlight-box">
+            <strong>The short version:</strong> Mylage does not collect, store, or transmit your personal data to any server. Your location data never leaves your device unless you choose to sync via iCloud, in which case it is encrypted and handled entirely by Apple.
+        </div>
+
+        <h2>1. Information We Do Not Collect</h2>
+        <p>Mylage is designed from the ground up to protect your privacy. We do <strong>not</strong> collect:</p>
+        <ul>
+            <li>Your name, email address, phone number, or any personal identifiers</li>
+            <li>Your location data, GPS coordinates, or travel history</li>
+            <li>Device identifiers, advertising IDs, or fingerprints</li>
+            <li>Usage analytics, crash reports, or behavioral data</li>
+            <li>Any data from your contacts, photos, calendar, or other apps</li>
+        </ul>
+        <p>There is no account creation, no sign-up, and no login. The app works entirely without identifying you.</p>
+
+        <h2>2. Data Stored on Your Device</h2>
+        <p>Mylage stores the following data <strong>locally on your iPhone</strong> using Apple's SwiftData framework:</p>
+        <ul>
+            <li><strong>Trip records</strong> — start/end times, distance, route points, transport mode, and location names</li>
+            <li><strong>Daily summaries</strong> — aggregated distance totals for each day</li>
+            <li><strong>Saved places</strong> — locations you manually name (e.g., "Home", "Office")</li>
+            <li><strong>App preferences</strong> — your settings such as distance unit, daily goal, and animation choices</li>
+        </ul>
+        <p>This data is stored in the app's private sandbox on your device. No other app can access it. It is not transmitted to us or any third party.</p>
+
+        <h2>3. Location Services</h2>
+        <p>Mylage uses your device's location services to detect and record trips. You control this permission:</p>
+        <ul>
+            <li><strong>"While Using"</strong> — the app only accesses location when open</li>
+            <li><strong>"Always"</strong> — the app can detect trips in the background (recommended for automatic tracking)</li>
+            <li><strong>"Never"</strong> — location is disabled; the app cannot track trips</li>
+        </ul>
+        <p>Your location data is processed <strong>entirely on-device</strong>. It is never sent to our servers because we do not have servers. Location coordinates are used to calculate distances and, optionally, to reverse-geocode place names using Apple's on-device geocoding API.</p>
+
+        <h2>4. iCloud Sync</h2>
+        <p>If you have iCloud enabled on your device, Mylage may sync your trip data across your Apple devices using Apple's CloudKit framework. This sync is:</p>
+        <ul>
+            <li><strong>Encrypted in transit and at rest</strong> by Apple</li>
+            <li><strong>Stored in your private iCloud account</strong> — only you can access it</li>
+            <li><strong>Not accessible to us</strong> — we cannot read, access, or decrypt your iCloud data</li>
+        </ul>
+        <p>You can disable iCloud sync for Mylage in your device's Settings > Apple Account > iCloud > Apps Using iCloud.</p>
+
+        <h2>5. Reverse Geocoding</h2>
+        <p>When a trip ends, Mylage may use Apple's <code>CLGeocoder</code> API to convert GPS coordinates into human-readable place names (e.g., "Walmart", "123 Main St"). This request is sent to Apple's servers and is subject to <a href="https://www.apple.com/privacy/" target="_blank">Apple's Privacy Policy</a>. We do not operate or control these servers.</p>
+
+        <h2>6. Third-Party Services</h2>
+        <p>Mylage does <strong>not</strong> include any third-party analytics, advertising, crash reporting, or tracking SDKs. Specifically:</p>
+        <ul>
+            <li>No Google Analytics, Firebase, or Amplitude</li>
+            <li>No Facebook SDK or Meta Pixel</li>
+            <li>No ad networks or data brokers</li>
+            <li>No crash reporting services (Crashlytics, Sentry, etc.)</li>
+        </ul>
+        <p>The only external dependencies are Apple's own frameworks (MapKit, CloudKit, CoreLocation) and the open-source Lottie animation library, which does not collect any data.</p>
+
+        <h2>7. In-App Purchases</h2>
+        <p>Mylage offers optional Pro features via in-app purchase. Transactions are processed entirely by Apple through the App Store. We do not receive or store your payment information, Apple ID, or billing details.</p>
+
+        <h2>8. Children's Privacy</h2>
+        <p>Mylage does not knowingly collect information from children under 13. Since we collect no personal information from any user, there is no age-specific data to protect. The app does not require an account and does not collect identifiers.</p>
+
+        <h2>9. Data Export and Deletion</h2>
+        <p>You have full control over your data:</p>
+        <ul>
+            <li><strong>Export</strong> — You can export your trip history as a CSV file at any time from the app's History screen</li>
+            <li><strong>Delete</strong> — You can delete individual trips or all data from within the app</li>
+            <li><strong>Uninstall</strong> — Deleting the app removes all locally stored data immediately</li>
+        </ul>
+
+        <h2>10. Changes to This Policy</h2>
+        <p>If we make material changes to this privacy policy, we will update this page and change the "Last updated" date above. Since we don't have your contact information, we encourage you to review this page periodically.</p>
+
+        <h2>11. Contact</h2>
+        <p>If you have questions about this privacy policy or the app's data practices, please contact us at:</p>
+        <p><strong>Email:</strong> <a href="mailto:support@mylage.app">support@mylage.app</a></p>
+
+        <div class="highlight-box" style="margin-top: 48px;">
+            <strong>Apple App Privacy Label:</strong> Mylage's App Store privacy label states "Data Not Collected" — because we genuinely collect no data. This isn't a marketing claim; it's the technical reality of how the app is built.
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-brand">
+                <span class="nav-logo">📍</span>
+                <span class="nav-name">Mylage</span>
+            </div>
+            <div class="footer-links">
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms of Service</a>
+                <a href="support.html">Support</a>
+            </div>
+            <div class="footer-copy">&copy; 2026 Mylage. All rights reserved.</div>
+        </div>
+    </footer>
+</body>
+</html>
