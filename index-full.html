@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mylage — Privacy-First Mileage Tracker for iPhone</title>
+    <meta name="description" content="Mylage automatically tracks your trips, calculates mileage, and keeps everything private. Replay routes, discover your most-visited places, and share trips. No account required. Free on the App Store.">
+    <meta name="keywords" content="mileage tracker, trip tracker, IRS mileage, business mileage, iPhone, iOS, privacy, trip replay, place frequency">
+    <meta property="og:title" content="Mylage — Privacy-First Mileage Tracker">
+    <meta property="og:description" content="Automatic trip tracking. Trip Replay. Place Frequency. No account. No cloud. Your data stays on your device.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mylage.app">
+    <meta name="apple-itunes-app" content="app-id=YOUR_APP_ID">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📍</text></svg>">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Spotlight section */
+        .spotlight { padding: 120px 0; background: var(--bg-subtle); }
+        .spotlight-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+            margin-bottom: 100px;
+        }
+        .spotlight-grid:last-child { margin-bottom: 0; }
+        .spotlight-grid.reverse { direction: rtl; }
+        .spotlight-grid.reverse > * { direction: ltr; }
+        .spotlight-text .eyebrow {
+            font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px;
+            color: var(--accent-light); margin-bottom: 16px;
+        }
+        .spotlight-text h3 {
+            font-size: clamp(28px, 4vw, 40px); font-weight: 800;
+            letter-spacing: -1px; line-height: 1.15; margin-bottom: 16px;
+        }
+        .spotlight-text p { font-size: 16px; color: var(--text-muted); line-height: 1.7; margin-bottom: 12px; }
+        .spotlight-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+        .pill {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: 100px; padding: 6px 14px; font-size: 13px; color: var(--text-muted);
+        }
+        .pill-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
+        .spotlight-visual {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: var(--radius-lg); padding: 40px;
+            display: flex; flex-direction: column; gap: 16px;
+        }
+        .mock-bar {
+            height: 8px; border-radius: 100px; background: var(--border);
+            overflow: hidden;
+        }
+        .mock-bar-fill {
+            height: 100%; border-radius: 100px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+        }
+        .mock-replay {
+            display: flex; align-items: center; gap: 12px;
+            background: var(--bg); border-radius: 10px; padding: 16px;
+        }
+        .mock-play-btn {
+            width: 44px; height: 44px; border-radius: 50%;
+            background: var(--accent); display: flex; align-items: center; justify-content: center;
+            font-size: 18px; flex-shrink: 0;
+        }
+        .mock-replay-info { flex: 1; }
+        .mock-replay-label { font-size: 13px; font-weight: 600; color: var(--text); }
+        .mock-replay-sub { font-size: 12px; color: var(--text-muted); }
+        .mock-speed-badge {
+            background: var(--accent-glow); border: 1px solid rgba(99,102,241,0.25);
+            color: var(--accent-light); font-size: 11px; font-weight: 700;
+            padding: 4px 10px; border-radius: 6px;
+        }
+        .mock-scrubber { position: relative; padding: 8px 0; }
+        .mock-scrubber-track {
+            height: 4px; border-radius: 100px; background: var(--border);
+            position: relative; overflow: visible;
+        }
+        .mock-scrubber-fill {
+            height: 100%; width: 62%; border-radius: 100px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+        }
+        .mock-scrubber-thumb {
+            position: absolute; top: 50%; right: 38%; transform: translate(50%, -50%);
+            width: 14px; height: 14px; border-radius: 50%;
+            background: white; box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+        }
+        .mock-stat-row {
+            display: flex; gap: 8px;
+        }
+        .mock-stat-pill {
+            flex: 1; background: var(--bg); border-radius: 8px; padding: 10px 12px; text-align: center;
+        }
+        .mock-stat-pill .val { font-size: 16px; font-weight: 700; color: var(--text); }
+        .mock-stat-pill .lbl { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .mock-place-list { display: flex; flex-direction: column; gap: 8px; }
+        .mock-place-row {
+            display: flex; align-items: center; gap: 12px;
+            background: var(--bg); border-radius: 10px; padding: 12px 16px;
+        }
+        .mock-rank {
+            width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0;
+            background: var(--accent); color: white;
+            font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center;
+        }
+        .mock-rank.dim { background: var(--bg-card); color: var(--text-muted); }
+        .mock-place-name { font-size: 14px; font-weight: 600; color: var(--text); flex: 1; }
+        .mock-place-count { font-size: 13px; color: var(--text-muted); }
+
+        /* What's New */
+        .whats-new { padding: 80px 0 0; }
+        .whats-new-header { text-align: center; margin-bottom: 48px; }
+        .whats-new-header .badge {
+            display: inline-block; padding: 5px 14px; border-radius: 100px;
+            background: rgba(52, 211, 153, 0.1); border: 1px solid rgba(52, 211, 153, 0.25);
+            color: var(--green); font-size: 12px; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;
+        }
+        .whats-new-header h2 {
+            font-size: clamp(28px, 4vw, 40px); font-weight: 800;
+            letter-spacing: -1px; margin-bottom: 10px;
+        }
+        .whats-new-header p { color: var(--text-muted); font-size: 16px; }
+        .new-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+        }
+        .new-card {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: var(--radius-lg); padding: 28px;
+            transition: all 0.3s ease;
+        }
+        .new-card:hover {
+            background: var(--bg-card-hover); border-color: rgba(99,102,241,0.3);
+            transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+        .new-card-icon { font-size: 32px; margin-bottom: 12px; }
+        .new-card h4 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+        .new-card p { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+        .new-tag {
+            display: inline-block; margin-top: 10px;
+            font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
+            padding: 3px 10px; border-radius: 6px;
+        }
+        .new-tag.free { background: rgba(52,211,153,0.1); color: var(--green); }
+        .new-tag.pro { background: var(--accent-glow); color: var(--accent-light); }
+
+        @media (max-width: 768px) {
+            .spotlight-grid { grid-template-columns: 1fr; gap: 40px; }
+            .spotlight-grid.reverse { direction: ltr; }
+            .new-grid { grid-template-columns: 1fr; }
+            .spotlight { padding: 80px 0; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Nav -->
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="/" class="nav-brand">
+                <span class="nav-logo">📍</span>
+                <span class="nav-name">Mylage</span>
+            </a>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#spotlight">What's New</a>
+                <a href="#privacy">Privacy</a>
+                <a href="support.html">Support</a>
+                <a href="#download" class="btn btn-sm">Download</a>
+            </div>
+            <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-bg">
+            <div class="hero-gradient"></div>
+            <div class="hero-dots"></div>
+        </div>
+        <div class="container hero-content">
+            <div class="hero-badge">Free on the App Store</div>
+            <h1>Track every mile.<br><span class="text-gradient">Keep every secret.</span></h1>
+            <p class="hero-sub">Mylage automatically logs your trips in the background — then lets you replay routes, discover your most-visited places, and share your journeys. No account, no cloud, no tracking.</p>
+            <div class="hero-actions">
+                <a href="#download" class="btn btn-primary btn-lg">
+                    <svg width="20" height="24" viewBox="0 0 20 24" fill="currentColor"><path d="M14.94 0C13.23.08 11.2 1.16 10.06 2.64c-1.02 1.32-1.91 3.35-1.58 5.3 1.86.06 3.78-1.02 4.87-2.52 1.04-1.42 1.78-3.42 1.59-5.42zM10.06 7.5C8.58 7.5 7.4 6.25 5.44 6.25 3.5 6.25.5 8.06.5 12.63.5 18.81 5.83 23.5 10 23.5c1.97 0 2.98-1.29 4.63-1.29 1.68 0 2.33 1.26 4.5 1.26C22.3 19.27 20 12 17.56 9.81c-1.19-1.06-2.7-1.69-3.94-1.69-1.79 0-2.87 1.31-4.56 1.31-1.66 0-2.4-1.28-3.5-1.28"/></svg>
+                    Download for iPhone
+                </a>
+                <a href="#features" class="btn btn-ghost btn-lg">See Features</a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat">
+                    <span class="stat-value">100%</span>
+                    <span class="stat-label">Private</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat">
+                    <span class="stat-value">$0</span>
+                    <span class="stat-label">To Start</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat">
+                    <span class="stat-value">0</span>
+                    <span class="stat-label">Accounts Needed</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Competitors -->
+    <section class="compare">
+        <div class="container">
+            <p class="compare-text">
+                MileIQ charges <strong>$59.99/yr</strong>. Everlance charges <strong>$49.99/yr</strong>.
+                Mylage gives you <strong>unlimited free tracking</strong> — and never sells your location data.
+            </p>
+        </div>
+    </section>
+
+    <!-- What's New -->
+    <section id="spotlight" class="features whats-new">
+        <div class="container">
+            <div class="whats-new-header">
+                <div class="badge">Recently Added</div>
+                <h2>New features, just shipped.</h2>
+                <p>More ways to explore your travel history — all on-device, all private.</p>
+            </div>
+            <div class="new-grid">
+                <div class="new-card">
+                    <div class="new-card-icon">▶️</div>
+                    <h4>Trip Replay</h4>
+                    <p>Watch any trip animate in real time on a map. Scrub through the timeline, switch speeds (1×–8×), and see distance and speed at every moment.</p>
+                    <span class="new-tag pro">Pro</span>
+                </div>
+                <div class="new-card">
+                    <div class="new-card-icon">🏪</div>
+                    <h4>Place Frequency</h4>
+                    <p>Discover the places you visit most — with real business names like "Wawa" or "Walmart". See departures vs arrivals and filter by month or all time.</p>
+                    <span class="new-tag pro">Pro</span>
+                </div>
+                <div class="new-card">
+                    <div class="new-card-icon">📤</div>
+                    <h4>Share a Trip</h4>
+                    <p>Export a beautiful trip summary card with route details, distance, duration, and average speed. Perfect for expense reports or just showing off.</p>
+                    <span class="new-tag pro">Pro</span>
+                </div>
+                <div class="new-card">
+                    <div class="new-card-icon">🔗</div>
+                    <h4>Trip Merging</h4>
+                    <p>Mylage detects when a quick stop split a trip into two and suggests merging them. One tap to combine.</p>
+                    <span class="new-tag free">Free</span>
+                </div>
+                <div class="new-card">
+                    <div class="new-card-icon">🔔</div>
+                    <h4>Weekly Digest</h4>
+                    <p>A Sunday evening notification with your week's total miles, trip count, and best travel day. Keeps you on track without opening the app.</p>
+                    <span class="new-tag free">Free</span>
+                </div>
+                <div class="new-card">
+                    <div class="new-card-icon">🎨</div>
+                    <h4>Custom App Icons</h4>
+                    <p>Choose from four icons — Default, Dark, Minimal, and Classic — to match your Home Screen vibe.</p>
+                    <span class="new-tag pro">Pro</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Spotlight: Trip Replay -->
+    <section class="spotlight">
+        <div class="container">
+            <div class="spotlight-grid">
+                <div class="spotlight-text">
+                    <div class="eyebrow">Trip Replay</div>
+                    <h3>Your route. Animated. Frame by frame.</h3>
+                    <p>Every trip you've ever taken is stored as a GPS breadcrumb trail. Trip Replay brings that data to life — watch your path grow on the map, scrub to any moment, and see exactly how fast you were moving.</p>
+                    <p>Variable playback speeds (1×, 2×, 4×, 8×) so a 20-minute commute takes as long — or as little — as you want.</p>
+                    <div class="spotlight-pills">
+                        <span class="pill"><span class="pill-dot"></span>Scrubber timeline</span>
+                        <span class="pill"><span class="pill-dot"></span>Live speed &amp; distance</span>
+                        <span class="pill"><span class="pill-dot"></span>1× – 8× playback</span>
+                        <span class="pill"><span class="pill-dot"></span>Full screen map</span>
+                    </div>
+                </div>
+                <div class="spotlight-visual">
+                    <div class="mock-replay">
+                        <div class="mock-play-btn">⏸</div>
+                        <div class="mock-replay-info">
+                            <div class="mock-replay-label">Home → Trader Joe's</div>
+                            <div class="mock-replay-sub">Playing • 4.2 mi remaining</div>
+                        </div>
+                        <div class="mock-speed-badge">2×</div>
+                    </div>
+                    <div class="mock-scrubber">
+                        <div class="mock-scrubber-track">
+                            <div class="mock-scrubber-fill"></div>
+                            <div class="mock-scrubber-thumb"></div>
+                        </div>
+                    </div>
+                    <div class="mock-stat-row">
+                        <div class="mock-stat-pill">
+                            <div class="val">6.8</div>
+                            <div class="lbl">Total mi</div>
+                        </div>
+                        <div class="mock-stat-pill">
+                            <div class="val">4.2</div>
+                            <div class="lbl">Elapsed mi</div>
+                        </div>
+                        <div class="mock-stat-pill">
+                            <div class="val">34</div>
+                            <div class="lbl">mph now</div>
+                        </div>
+                    </div>
+                    <div class="mock-bar">
+                        <div class="mock-bar-fill" style="width:62%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Spotlight: Place Frequency -->
+            <div class="spotlight-grid reverse">
+                <div class="spotlight-text">
+                    <div class="eyebrow">Place Frequency</div>
+                    <h3>Know where you actually spend your time.</h3>
+                    <p>Mylage analyzes your trip start and end points and surfaces the places you return to most often — using real business names like "Wawa", "Walmart", or "Planet Fitness" instead of street addresses.</p>
+                    <p>Filter by this month or all time. See how many times each place was a departure vs. an arrival. A data nerd's dream, built right in.</p>
+                    <div class="spotlight-pills">
+                        <span class="pill"><span class="pill-dot"></span>Real POI names</span>
+                        <span class="pill"><span class="pill-dot"></span>Departure vs arrival</span>
+                        <span class="pill"><span class="pill-dot"></span>Month / all-time</span>
+                        <span class="pill"><span class="pill-dot"></span>100% on-device</span>
+                    </div>
+                </div>
+                <div class="spotlight-visual">
+                    <div class="mock-place-list">
+                        <div class="mock-place-row">
+                            <div class="mock-rank">1</div>
+                            <div class="mock-place-name">Home</div>
+                            <div class="mock-place-count">41 visits</div>
+                        </div>
+                        <div class="mock-place-row">
+                            <div class="mock-rank">2</div>
+                            <div class="mock-place-name">Trader Joe's</div>
+                            <div class="mock-place-count">18 visits</div>
+                        </div>
+                        <div class="mock-place-row">
+                            <div class="mock-rank">3</div>
+                            <div class="mock-place-name">Planet Fitness</div>
+                            <div class="mock-place-count">14 visits</div>
+                        </div>
+                        <div class="mock-place-row">
+                            <div class="mock-rank dim">4</div>
+                            <div class="mock-place-name">Wawa</div>
+                            <div class="mock-place-count">11 visits</div>
+                        </div>
+                        <div class="mock-place-row">
+                            <div class="mock-rank dim">5</div>
+                            <div class="mock-place-name">CVS Pharmacy</div>
+                            <div class="mock-place-count">9 visits</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>Everything you need.<br>Nothing you don't.</h2>
+                <p>Automatic tracking that works in the background while respecting your battery and your privacy.</p>
+            </div>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🚗</div>
+                    <h3>Auto-Detection</h3>
+                    <p>Mylage detects when you start driving, walking, or biking and begins logging automatically. No buttons to press.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📍</div>
+                    <h3>Smart Trip Naming</h3>
+                    <p>Trips are automatically named with real locations — "Home → Walmart" — using on-device reverse geocoding with full POI name support.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💼</div>
+                    <h3>Business vs Personal</h3>
+                    <p>Tag trips as business or personal with a single tap. Export business miles for IRS deductions at tax time.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔋</div>
+                    <h3>Battery Smart</h3>
+                    <p>Speed-adaptive GPS, automatic GPS pause when stationary, and battery-level awareness keep drain minimal.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🏝️</div>
+                    <h3>Dynamic Island</h3>
+                    <p>See your active trip on the Dynamic Island and Lock Screen with live distance, speed, and duration.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>CSV Export</h3>
+                    <p>Export your trip history to CSV for accounting, expense reports, or tax filing. Filter by date and category.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🗺️</div>
+                    <h3>Saved Places</h3>
+                    <p>Save frequent destinations — home, office, gym — so trips are named with your labels automatically.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌙</div>
+                    <h3>Dark Mode Map</h3>
+                    <p>Route maps adapt to your device's appearance setting with a polished dark-mode style that's easy on the eyes at night.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎙️</div>
+                    <h3>Siri Shortcuts</h3>
+                    <p>Ask Siri for today's mileage, this week's distance, or start tracking — four built-in shortcuts for hands-free access.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>Home Screen Widgets</h3>
+                    <p>Small, medium, and large widgets show today's miles, recent trips, and your daily goal progress at a glance.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">☁️</div>
+                    <h3>iCloud Sync</h3>
+                    <p>Your data syncs across your Apple devices via iCloud — encrypted, private, no third-party servers.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎬</div>
+                    <h3>Live Animations</h3>
+                    <p>Choose from beautiful Lottie animations for each transport mode. Watch your compass spin or car cruise while tracking.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Privacy -->
+    <section id="privacy" class="privacy-section">
+        <div class="container">
+            <div class="privacy-grid">
+                <div class="privacy-content">
+                    <h2>Privacy isn't a feature.<br>It's the foundation.</h2>
+                    <p>Most mileage trackers upload your location data to their servers. Some sell it. Mylage is different.</p>
+                    <ul class="privacy-list">
+                        <li>
+                            <span class="check">✓</span>
+                            <span><strong>On-device processing</strong> — location data never leaves your iPhone</span>
+                        </li>
+                        <li>
+                            <span class="check">✓</span>
+                            <span><strong>No account required</strong> — no email, no phone number, no sign-up</span>
+                        </li>
+                        <li>
+                            <span class="check">✓</span>
+                            <span><strong>No analytics or tracking SDKs</strong> — zero third-party code watches you</span>
+                        </li>
+                        <li>
+                            <span class="check">✓</span>
+                            <span><strong>iCloud sync only</strong> — if you sync, it goes through Apple, encrypted</span>
+                        </li>
+                        <li>
+                            <span class="check">✓</span>
+                            <span><strong>Place Frequency is local-only</strong> — your most-visited spots never leave the device</span>
+                        </li>
+                        <li>
+                            <span class="check">✓</span>
+                            <span><strong>No ads, ever</strong> — we make money from optional Pro features, not your data</span>
+                        </li>
+                    </ul>
+                    <a href="privacy.html" class="btn btn-ghost">Read Full Privacy Policy</a>
+                </div>
+                <div class="privacy-visual">
+                    <div class="shield">
+                        <div class="shield-icon">🛡️</div>
+                        <div class="shield-ring"></div>
+                        <div class="shield-ring shield-ring-2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="pricing">
+        <div class="container">
+            <div class="section-header">
+                <h2>Generous free tier.<br>No tricks.</h2>
+                <p>Most features are free forever. Pro unlocks the differentiators.</p>
+            </div>
+            <div class="pricing-grid">
+                <div class="price-card">
+                    <div class="price-tier">Free</div>
+                    <div class="price-amount">$0</div>
+                    <div class="price-period">forever</div>
+                    <ul class="price-features">
+                        <li>Unlimited trip tracking</li>
+                        <li>Auto-detection (drive, walk, bike)</li>
+                        <li>Trip naming &amp; history</li>
+                        <li>Business / personal tagging</li>
+                        <li>Trip merging suggestions</li>
+                        <li>CSV export</li>
+                        <li>Daily goal tracking</li>
+                        <li>Weekly digest notification</li>
+                        <li>Dark mode maps</li>
+                        <li>Dynamic Island &amp; Lock Screen</li>
+                        <li>iCloud sync</li>
+                    </ul>
+                </div>
+                <div class="price-card price-card-pro">
+                    <div class="price-badge">Best Value</div>
+                    <div class="price-tier">Pro</div>
+                    <div class="price-amount">$14.99</div>
+                    <div class="price-period">per year — or $39.99 lifetime</div>
+                    <ul class="price-features">
+                        <li>Everything in Free, plus:</li>
+                        <li>Trip Replay with scrubber &amp; speeds</li>
+                        <li>Place Frequency insights</li>
+                        <li>Trip share cards</li>
+                        <li>Premium Lottie animations</li>
+                        <li>Home Screen widgets</li>
+                        <li>Siri Shortcuts (4 built-in)</li>
+                        <li>Custom app icons</li>
+                        <li>Priority support</li>
+                    </ul>
+                    <a href="#download" class="btn btn-primary">Get Mylage Pro</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Download -->
+    <section id="download" class="download">
+        <div class="container">
+            <h2>Start tracking today.</h2>
+            <p>Free download. No account. Ready in seconds.</p>
+            <a href="https://apps.apple.com/app/mylage/idYOUR_APP_ID" class="app-store-badge" aria-label="Download on the App Store">
+                <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store" height="54">
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-brand">
+                <span class="nav-logo">📍</span>
+                <span class="nav-name">Mylage</span>
+            </div>
+            <div class="footer-links">
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms of Service</a>
+                <a href="support.html">Support</a>
+            </div>
+            <div class="footer-copy">
+                &copy; 2026 Mylage. All rights reserved.
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
